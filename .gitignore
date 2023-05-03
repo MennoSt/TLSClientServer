@@ -1,0 +1,8 @@
+*.cmake
+*.pem
+*build
+*CMakeFiles
+*.csr
+*.pem
+*.key
+*.a
