@@ -1,3 +1,10 @@
-Basic State Machine implemented from:
+Dependencies:
+- Boost version > 1.74
+- OpenSSL
 
-https://refactoring.guru/design-patterns/state/cpp/example#:~:text=State%20%2F%20C%2B%2B-,State%20in%20C%2B%2B,of%20acting%20on%20its%20own.
+Cryptography Examples:
+- TLS Client Server made with boost https://www.boost.org/doc/libs/1_78_0/doc/html/boost_asio/examples/cpp11_examples.html
+- Hash, Random number and Certificate Generation.
+
+certificate generation:
+- Execute the ./generateCertificates.sh script

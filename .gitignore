@@ -6,3 +6,8 @@
 *.pem
 *.key
 *.a
+*Client
+*Server
+*.vscode/
+*CMakeCache.txt
+*Makefile

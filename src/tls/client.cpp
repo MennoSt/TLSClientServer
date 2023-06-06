@@ -51,7 +51,7 @@ private:
     char subject_name[256];
     X509* cert = X509_STORE_CTX_get_current_cert(ctx.native_handle());
     X509_NAME_oneline(X509_get_subject_name(cert), subject_name, 256);
-    std::cout << "Verifying " << subject_name << "\n";
+    // std::cout << "Verifying " << subject_name << "\n";
 
     return preverified;
   }
@@ -136,13 +136,10 @@ private:
 
 int main(int argc, char* argv[])
 {
+  std::cout << "Client started" << std::endl;
+  
   try
   {
-    // if (argc != 3)
-    // {
-    //   std::cerr << "Usage: client <host> <port>\n";
-    //   return 1;
-    // }
 
     boost::asio::io_context io_context;
 
@@ -152,6 +149,11 @@ int main(int argc, char* argv[])
     boost::asio::ssl::context ctx(boost::asio::ssl::context::sslv23);
     ctx.load_verify_file("certificates/certs/v2gRootCACert.pem");
 
+    // ctx.set_options(
+    // | boost::asio::ssl::context::no_tlsv1_3
+    // | boost::asio::ssl::context::no_tlsv1_2
+    // );
+    
     client c(io_context, ctx, endpoints);
 
     io_context.run();

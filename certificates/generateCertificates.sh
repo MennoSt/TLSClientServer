@@ -45,25 +45,25 @@ openssl x509 -req -in csrs/seccCert.csr -extfile configs/seccCert.cnf -extension
 # seccCertChain
 cat certs/seccCert.pem certs/cpoSubCA2Cert.pem certs/cpoSubCA1Cert.pem > certs/seccCertChain.pem
 
-# # oemRootCA
-# openssl ecparam -genkey -name secp521r1 -out privateKeys/oemRootCA.key 
-# openssl req -new -key privateKeys/oemRootCA.key -config configs/oemRootCACert.cnf -out csrs/oemRootCA.csr
-# openssl x509 -req -in csrs/oemRootCA.csr -extfile configs/oemRootCACert.cnf -extensions ext -signkey privateKeys/oemRootCA.key -sha256 -set_serial 12345 -out certs/oemRootCACert.pem -days $validity_oem_root_cert
+# oemRootCA
+openssl ecparam -genkey -name secp521r1 -out privateKeys/oemRootCA.key 
+openssl req -new -key privateKeys/oemRootCA.key -config configs/oemRootCACert.cnf -out csrs/oemRootCA.csr
+openssl x509 -req -in csrs/oemRootCA.csr -extfile configs/oemRootCACert.cnf -extensions ext -signkey privateKeys/oemRootCA.key -sha256 -set_serial 12345 -out certs/oemRootCACert.pem -days $validity_oem_root_cert
 
-# # vehicleSubCA1
-# openssl ecparam -genkey -name secp521r1 -out privateKeys/vehicleSubCA1.key  
-# openssl req -new -key privateKeys/vehicleSubCA1.key -config configs/vehicleSubCA1Cert.cnf -out csrs/vehicleSubCA1.csr
-# openssl x509 -req -in csrs/vehicleSubCA1.csr -extfile configs/vehicleSubCA1Cert.cnf -extensions ext -CA certs/oemRootCACert.pem -CAkey privateKeys/oemRootCA.key -set_serial 12345 -out certs/vehicleSubCA1Cert.pem -days $validity_vehicle_subca1_cert
+# vehicleSubCA1
+openssl ecparam -genkey -name secp521r1 -out privateKeys/vehicleSubCA1.key  
+openssl req -new -key privateKeys/vehicleSubCA1.key -config configs/vehicleSubCA1Cert.cnf -out csrs/vehicleSubCA1.csr
+openssl x509 -req -in csrs/vehicleSubCA1.csr -extfile configs/vehicleSubCA1Cert.cnf -extensions ext -CA certs/oemRootCACert.pem -CAkey privateKeys/oemRootCA.key -set_serial 12345 -out certs/vehicleSubCA1Cert.pem -days $validity_vehicle_subca1_cert
 
-# # vehicleSubCA2
-# openssl ecparam -genkey -name secp521r1 -out privateKeys/vehicleSubCA2.key
-# openssl req -new -key privateKeys/vehicleSubCA2.key -config configs/vehicleSubCA2Cert.cnf -out csrs/vehicleSubCA2.csr
-# openssl x509 -req -in csrs/vehicleSubCA2.csr -extfile configs/vehicleSubCA2Cert.cnf -extensions ext -CA certs/vehicleSubCA1Cert.pem -CAkey privateKeys/vehicleSubCA1.key -set_serial 12345 -out certs/vehicleSubCA2Cert.pem -days $validity_vehicle_subca2_cert 
+# vehicleSubCA2
+openssl ecparam -genkey -name secp521r1 -out privateKeys/vehicleSubCA2.key
+openssl req -new -key privateKeys/vehicleSubCA2.key -config configs/vehicleSubCA2Cert.cnf -out csrs/vehicleSubCA2.csr
+openssl x509 -req -in csrs/vehicleSubCA2.csr -extfile configs/vehicleSubCA2Cert.cnf -extensions ext -CA certs/vehicleSubCA1Cert.pem -CAkey privateKeys/vehicleSubCA1.key -set_serial 12345 -out certs/vehicleSubCA2Cert.pem -days $validity_vehicle_subca2_cert 
 
-# # vehicleCert
-# openssl ecparam -genkey -name secp521r1 -out privateKeys/vehicle.key 
-# openssl req -new -key privateKeys/vehicle.key -config configs/vehicleCert.cnf -out csrs/vehicleCert.csr
-# openssl x509 -req -in csrs/vehicleCert.csr -extfile configs/vehicleCert.cnf -extensions ext -CA certs/vehicleSubCA2Cert.pem -CAkey privateKeys/vehicleSubCA2.key -set_serial 12345 -out certs/vehicleCert.pem -days $validity_vehicle_cert 
+# vehicleCert
+openssl ecparam -genkey -name secp521r1 -out privateKeys/vehicle.key 
+openssl req -new -key privateKeys/vehicle.key -config configs/vehicleCert.cnf -out csrs/vehicleCert.csr
+openssl x509 -req -in csrs/vehicleCert.csr -extfile configs/vehicleCert.cnf -extensions ext -CA certs/vehicleSubCA2Cert.pem -CAkey privateKeys/vehicleSubCA2.key -set_serial 12345 -out certs/vehicleCert.pem -days $validity_vehicle_cert 
 
-# # vehicleCertChain
-# cat certs/vehicleCert.pem certs/vehicleSubCA2Cert.pem certs/vehicleSubCA1Cert.pem > certs/vehicleCertChain.pem
+# vehicleCertChain
+cat certs/vehicleCert.pem certs/vehicleSubCA2Cert.pem certs/vehicleSubCA1Cert.pem > certs/vehicleCertChain.pem

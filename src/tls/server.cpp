@@ -81,16 +81,18 @@ public:
     : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)),
       context_(boost::asio::ssl::context::sslv23)
   {
+    context_.set_password_callback(std::bind(&server::get_password, this));
+    
     context_.set_options(
         boost::asio::ssl::context::default_workarounds
         | boost::asio::ssl::context::no_sslv2
+        // | boost::asio::ssl::context::no_tlsv1_3
+        // | boost::asio::ssl::context::no_tlsv1_2
         | boost::asio::ssl::context::single_dh_use);
 
-    context_.set_password_callback(std::bind(&server::get_password, this));
     context_.use_certificate_chain_file("certificates/certs/seccCertChain.pem");
     context_.use_private_key_file("certificates/privateKeys/secc.key", boost::asio::ssl::context::pem);
-    context_.use_tmp_dh_file("certificates/dh4096.pem");
-    SSL_CTX_set_cipher_list(context_.native_handle(), "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256");
+    SSL_CTX_set_ciphersuites(context_.native_handle(), "TLS_AES_256_GCM_SHA384::TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256");
 
     do_accept();
   }
@@ -125,16 +127,11 @@ int main(int argc, char* argv[])
 {
   try
   {
-    // if (argc != 2)
-    // {
-    //   std::cerr << "Usage: server <port>\n";
-    //   return 1;
-    // }
-
     boost::asio::io_context io_context;
 
     using namespace std; // For atoi.
     server s(io_context, atoi("1234"));
+    std::cout << "Server started" << std::endl;
 
     io_context.run();
   }
